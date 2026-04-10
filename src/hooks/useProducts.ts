@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ApiService } from "../services";
+import { get } from "../services/api"; // ✅ import your get function
 import type { Product } from "../types/types";
 
 export const useProducts = () => {
@@ -15,20 +15,24 @@ export const useProducts = () => {
       setErrorMessage("");
 
       try {
-        const data = await ApiService.getProducts();
+      
+        const data = await get<Product[]>("Products");
 
-        if (ignore) {
-          return;
-        }
+        if (ignore) return;
 
-        setProducts(data);
+        
+        const productList = data || [];
+
+        setProducts(productList);
         setIsLoading(false);
 
-        if (data.length === 0) {
+        if (productList.length === 0) {
           setErrorMessage("No products found.");
         }
+
       } catch (error) {
         if (!ignore) {
+          console.error("Failed to load products:", error);
           setErrorMessage("Failed to load products.");
           setIsLoading(false);
         }

@@ -36,10 +36,10 @@ export default function ProductGrid({
     <div className="product-grid">
       {products.map((product, index) => (
         <ProductCard
-          key={`${product.productId}-${product.name}-${index}`}
+          key={`${product.id}-${product.name}-${index}`}
           product={product}
           onAdd={onAddToCart}
-          disabled={isAddingProduct === product.productId}
+          disabled={isAddingProduct === product.id}
         />
       ))}
     </div>

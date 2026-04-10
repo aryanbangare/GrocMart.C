@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ApiService } from "../services";
+import { get, post } from "../services/api"; 
 import { getStoredUserId } from "../utils/storage";
 
 export const useCart = () => {
@@ -9,47 +9,61 @@ export const useCart = () => {
   const userId = getStoredUserId();
 
   const loadCartCount = async () => {
-    if (!Number.isFinite(userId)) {
-      setCartCount(0);
-      return;
-    }
+    try {
+      if (!Number.isFinite(userId)) {
+        setCartCount(0);
+        return;
+      }
 
-    const cart = await ApiService.getCart(userId);
-    const total = cart.reduce((sum, item) => sum + item.quantity, 0);
-    setCartCount(total);
+    
+      const cart = await get<any[]>(`Cart/${userId}`);
+
+      const total = (cart || []).reduce(
+        (sum: number, item: any) => sum + item.quantity,
+        0
+      );
+
+      setCartCount(total);
+    } catch (error) {
+      console.error("Failed to load cart", error);
+      setCartCount(0);
+    }
   };
 
-  const addToCart = async (productId: number) => {
-    if (pendingAddRef.current.has(productId)) {
-      return;
-    }
+  const addToCart = async (id: number) => {
+    if (pendingAddRef.current.has(id)) return;
 
     if (!Number.isFinite(userId)) {
-      throw new Error("User id is missing. Please log in again before adding items to cart.");
+      throw new Error("User id is missing. Please log in again.");
     }
 
-    if (!Number.isFinite(productId)) {
-      throw new Error("This product is missing a valid product id.");
+    if (!Number.isFinite(id)) {
+      throw new Error("Invalid product id.");
     }
 
-    pendingAddRef.current.add(productId);
-    setIsAdding(productId);
+    pendingAddRef.current.add(id);
+    setIsAdding(id);
 
     try {
-      const response = await ApiService.addToCart({
+      
+      const response = await post<any>("Cart", {
         userId,
-        productId,
+        productId: id,
         quantity: 1,
       });
 
-      if (!response.ok) {
-        throw new Error(response.message);
+      if (!response) {
+        throw new Error("Failed to add item to cart.");
       }
 
       await loadCartCount();
       return response;
+
+    } catch (error) {
+      console.error(error);
+      throw error;
     } finally {
-      pendingAddRef.current.delete(productId);
+      pendingAddRef.current.delete(id);
       setIsAdding(null);
     }
   };

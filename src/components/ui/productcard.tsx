@@ -34,7 +34,7 @@ export default function ProductCard({
       <button
         type="button"
         className="button-primary"
-        onClick={() => onAdd(product.productId)}
+        onClick={() => onAdd(product.id)}
         disabled={disabled || isOutOfStock}
       >
         {isOutOfStock ? "Out of stock" : "Add to cart"}

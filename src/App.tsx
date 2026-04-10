@@ -2,7 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Login from "./features/auth/login";
 import Register from "./features/auth/register";
 import Home from "./components/features/home";
-import Cart from "./components/features/cart";
+import Cart from "./components/features/cart/cart";
 
 export default function App() {
   return (

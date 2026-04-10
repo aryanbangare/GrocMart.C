@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ApiService } from "../../services";
-
+import { post } from "../../services/api";
 
 export default function Login() {
   const [name, setName] = useState("");
@@ -19,33 +18,43 @@ export default function Login() {
       return;
     }
 
-    setIsSubmitting(true);
-    const result = await ApiService.login({ name: name.trim(), passwordHash });
-    setIsSubmitting(false);
+    try {
+      setIsSubmitting(true);
 
-    if (!result.ok) {
-      setErrorMessage(result.message || "Invalid login details.");
-      return;
+
+      const user = await post<any>("Users/login", {
+        name: name.trim(),
+        passwordHash,
+      });
+
+      setIsSubmitting(false);
+
+      if (!user) {
+        setErrorMessage("Invalid login details.");
+        return;
+      }
+
+
+      const resolvedUserId =
+        user?.userId ??
+        user?.id ??
+        user?.userID ??
+        (typeof user === "number" ? user : undefined);
+
+
+      localStorage.setItem("name", name.trim());
+
+      if (resolvedUserId !== undefined) {
+        localStorage.setItem("userId", String(resolvedUserId));
+      }
+
+      navigate("/home");
+
+    } catch (error) {
+      setIsSubmitting(false);
+      setErrorMessage("Something went wrong. Try again.");
+      console.error(error);
     }
-
-    const user = result.data;
-    const resolvedUserId =
-      user?.userId ??
-      user?.id ??
-      user?.userID ??
-      user?.userIdValue ??
-      (typeof user === "number" ? user : undefined) ??
-      (typeof user === "string" ? Number(user) : undefined);
-
-    localStorage.setItem("name", name.trim());
-
-    if (resolvedUserId !== undefined && Number.isFinite(Number(resolvedUserId))) {
-      localStorage.setItem("userId", String(resolvedUserId));
-    } else {
-      localStorage.removeItem("userId");
-    }
-
-    navigate("/home");
   };
 
   return (
@@ -57,34 +66,31 @@ export default function Login() {
             <p>Enter your account details below.</p>
           </div>
 
-          {errorMessage ? (
+          {errorMessage && (
             <div className="status-banner error">{errorMessage}</div>
-          ) : null}
+          )}
 
           <div className="field">
-            <label htmlFor="login-name">Name</label>
+            <label>Name</label>
             <input
-              id="login-name"
               type="text"
               value={name}
-              onChange={(event) => setName(event.target.value)}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Enter your name"
             />
           </div>
 
           <div className="field">
-            <label htmlFor="login-password">Password</label>
+            <label>Password</label>
             <input
-              id="login-password"
               type="password"
               value={passwordHash}
-              onChange={(event) => setPasswordHash(event.target.value)}
+              onChange={(e) => setPasswordHash(e.target.value)}
               placeholder="Enter your password"
             />
           </div>
 
           <button
-            type="button"
             className="button-primary"
             onClick={handleLogin}
             disabled={isSubmitting}
@@ -94,7 +100,7 @@ export default function Login() {
 
           <p className="auth-switch">
             New here?{" "}
-            <button type="button" onClick={() => navigate("/register")}>
+            <button onClick={() => navigate("/register")}>
               Create an account
             </button>
           </p>
