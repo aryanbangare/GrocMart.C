@@ -1,12 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { get, post } from "../services/api"; 
-import { getStoredUserId } from "../utils/storage";
+import { get, post } from "../services/api";
 
 export const useCart = () => {
   const [cartCount, setCartCount] = useState(0);
   const [isAdding, setIsAdding] = useState<number | null>(null);
   const pendingAddRef = useRef<Set<number>>(new Set());
-  const userId = getStoredUserId();
+  const userId = Number(localStorage.getItem("userId")) || NaN;
 
   const loadCartCount = async () => {
     try {

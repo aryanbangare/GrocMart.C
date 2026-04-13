@@ -7,7 +7,7 @@ interface NavbarProps {
 export default function Navbar({ cartCount }: NavbarProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const userName = localStorage.getItem("name") || "Guest";
+
 
   const handleLogout = () => {
     localStorage.removeItem("name");
@@ -44,9 +44,6 @@ export default function Navbar({ cartCount }: NavbarProps) {
         >
           Cart
         </NavLink>
-        <span className="nav-chip">
-          {userName === "Guest" ? "Welcome" : `Hi, ${userName}`}
-        </span>
       </nav>
 
       <div className="nav-actions">

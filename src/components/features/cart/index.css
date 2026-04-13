@@ -1,4 +1,4 @@
-/* Container */
+
 .container {
   max-width: 800px;
   margin: 30px auto;
@@ -6,12 +6,12 @@
   font-family: Arial, sans-serif;
 }
 
-/* Title */
+
 .container h2 {
   margin-bottom: 20px;
 }
 
-/* Cart Item */
+
 .cart-card {
   display: flex;
   justify-content: space-between;
@@ -23,7 +23,7 @@
   background: #fff;
 }
 
-/* Left */
+
 .cart-info h3 {
   margin: 0;
   font-size: 16px;
@@ -34,7 +34,7 @@
   color: #555;
 }
 
-/* Quantity */
+
 .qty-box {
   display: flex;
   align-items: center;
@@ -54,12 +54,12 @@
   text-align: center;
 }
 
-/* Price */
+
 .price {
   font-weight: bold;
 }
 
-/* Remove */
+
 .remove-btn {
   background: none;
   border: none;
@@ -67,7 +67,6 @@
   cursor: pointer;
 }
 
-/* Footer */
 .cart-footer {
   margin-top: 20px;
   text-align: right;
@@ -82,7 +81,7 @@
   cursor: pointer;
 }
 
-/* Empty */
+
 .empty {
   text-align: center;
   margin-top: 40px;

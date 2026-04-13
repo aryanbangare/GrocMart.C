@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { post } from "../../services/api";
+import { post } from "../../../services/api";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -22,7 +22,6 @@ export default function Register() {
     try {
       setIsSubmitting(true);
 
-
       const result = await post<any>("Users/register", {
         name: name.trim(),
         passwordHash,
@@ -30,19 +29,16 @@ export default function Register() {
 
       setIsSubmitting(false);
 
-  
       if (!result) {
         setErrorMessage("Registration failed.");
         return;
       }
 
-    
       setStatusMessage("Account created successfully. You can sign in now.");
 
       setTimeout(() => {
         navigate("/");
       }, 800);
-
     } catch (error) {
       setIsSubmitting(false);
       setErrorMessage("Something went wrong. Try again.");
@@ -97,9 +93,7 @@ export default function Register() {
 
           <p className="auth-switch">
             Already registered?{" "}
-            <button onClick={() => navigate("/")}>
-              Back to login
-            </button>
+            <button onClick={() => navigate("/")}>Back to login</button>
           </p>
         </section>
       </div>

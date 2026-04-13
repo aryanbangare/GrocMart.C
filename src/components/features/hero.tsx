@@ -1,5 +1,4 @@
 import heroImage from "../../assets/hero.png";
-import { getStoredUserName } from "../../utils/storage";
 
 interface HeroProps {
   totalProducts: number;
@@ -10,7 +9,7 @@ interface HeroProps {
 export default function Hero({
   totalProducts,
 }: HeroProps) {
-  const shopperName = getStoredUserName();
+  const shopperName = localStorage.getItem("name") || "User";
 
   return (
     <section className="panel hero-panel">
@@ -27,11 +26,11 @@ export default function Hero({
           <div className="hero-stats">
             <div className="hero-stat">
               <strong>{totalProducts}</strong>
-               <div className="eyebrow">Item Available </div>
+              <div className="eyebrow">Item Available </div>
             </div>
             <div className="hero-stat">
               <strong>20 min</strong>
-               <div className="eyebrow">Fast delivery</div>
+              <div className="eyebrow">Fast delivery</div>
             </div>
             <div className="hero-stat">
               <strong>7 days</strong>

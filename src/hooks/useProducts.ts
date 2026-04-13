@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { get } from "../services/api"; // ✅ import your get function
+import { get } from "../services/api"; 
 import type { Product } from "../types/types";
 
 export const useProducts = () => {

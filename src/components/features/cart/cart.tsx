@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../layout/navbar";
 import { get, post, patch, del } from "../../../services/api";
-import { getStoredUserId } from "../../../utils/storage";
 import "./index.css";
 
 type CartItem = {
@@ -18,17 +17,17 @@ export default function Cart() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
 
-  const userId = getStoredUserId();
+  const userId = Number(localStorage.getItem("userId")) || NaN;
   const navigate = useNavigate();
 
-  // ✅ LOAD CART
+
   const loadCart = async () => {
     try {
       const data = await get<any[]>(`Cart/${userId}`);
 
       const mapped = (data || []).map((i: any) => ({
         cartId: i.id,
-        productId: i.productID, // 🔥 IMPORTANT
+        productId: i.productID, 
         productName: i.productName,
         price: i.price ?? 0,
         quantity: i.quantity ?? 0,
@@ -36,7 +35,7 @@ export default function Cart() {
 
       setCart(mapped);
     } catch {
-      setMessage("❌ Failed to load cart");
+      setMessage(" Failed to load cart");
     } finally {
       setLoading(false);
     }
@@ -46,7 +45,7 @@ export default function Cart() {
     if (userId) loadCart();
   }, [userId]);
 
-  // ✅ UPDATE QUANTITY
+
   const updateQty = async (item: CartItem, qty: number) => {
     try {
       if (qty <= 0) {
@@ -57,27 +56,27 @@ export default function Cart() {
 
       await loadCart();
     } catch {
-      setMessage("❌ Failed to update cart");
+      setMessage(" Failed to update cart");
     }
   };
 
-  // ✅ REMOVE ITEM
+
   const removeItem = async (item: CartItem) => {
     try {
       await del(`Cart/${item.cartId}`);
       await loadCart();
     } catch {
-      setMessage("❌ Failed to remove item");
+      setMessage(" Failed to remove item");
     }
   };
 
-  // ✅ CHECKOUT (FIXED)
+
   const checkout = async () => {
     try {
       const payload = {
         userId,
         items: cart.map((item) => ({
-          productId: Number(item.productId), // 🔥 FIX
+          productId: Number(item.productId),
           quantity: Number(item.quantity),
         })),
       };
@@ -86,11 +85,11 @@ export default function Cart() {
 
       await post("OrderItems/checkout", payload);
 
-      setMessage("✅ Order placed successfully");
+      setMessage(" Order placed successfully");
       setCart([]);
     } catch (err) {
       console.error(err);
-      setMessage("❌ Checkout failed");
+      setMessage(" Checkout failed");
     }
   };
 
@@ -100,7 +99,7 @@ export default function Cart() {
     0
   );
 
-  // ================= UI =================
+
 
   return (
     <div className="page-shell">
@@ -150,7 +149,7 @@ export default function Cart() {
                 </div>
 
                 <button onClick={() => removeItem(item)}>
-                  ❌ Remove
+                   Remove
                 </button>
               </div>
             ))}
@@ -160,7 +159,7 @@ export default function Cart() {
             <h3>Total: Rs. {totalPrice.toFixed(2)}</h3>
 
             <button onClick={checkout}>
-              ✅ Checkout
+               Checkout
             </button>
           </>
         )}
