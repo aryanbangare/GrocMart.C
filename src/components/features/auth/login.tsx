@@ -63,7 +63,7 @@ const handleLogin = async (e: React.FormEvent) => {
 return (
     <div className="auth-shell">
     <div className="auth-card">
-        <section className="auth-form">
+   <form className="auth-form" onSubmit={handleLogin}>
         <div>
             <h2>Login</h2>
             <p>Enter your account details below.</p>
@@ -94,20 +94,20 @@ return (
         </div>
 
         <button
+            type="submit"
             className="button-primary"
-            onClick={handleLogin}
             disabled={isSubmitting}
         >
-            {isSubmitting ? "Signing in..." : "Login"}
+            {isSubmitting ? "logging..." : "Login"}
         </button>
 
         <p className="auth-switch">
             New here?{" "}
-            <button onClick={() => navigate("/register")}>
+            <button type="button" onClick={() => navigate("/register")}>
             Create an account
             </button>
         </p>
-        </section>
+        </form>
     </div>
     </div>
 );

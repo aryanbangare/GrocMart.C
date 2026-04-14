@@ -18,6 +18,7 @@ export default function Navbar({ cartCount }: NavbarProps) {
   const isCartPage = location.pathname === "/cart";
 
   return (
+    
     <header className="topbar">
       <div className="brand-block">
         <div className="brand-mark">GM</div>
@@ -26,7 +27,7 @@ export default function Navbar({ cartCount }: NavbarProps) {
           <p>Fresh Grocery Delivery</p>
         </div>
       </div>
-
+        
       <nav className="nav-links">
         <NavLink
           to="/home"

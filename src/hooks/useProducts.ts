@@ -25,7 +25,7 @@ export const useProducts = () => {
 
         setProducts(productList);
         setIsLoading(false);
-
+ 
         if (productList.length === 0) {
           setErrorMessage("No products found.");
         }

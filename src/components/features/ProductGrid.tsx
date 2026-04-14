@@ -1,4 +1,4 @@
-import ProductCard from "../ui/productcard";
+import ProductCard from "./productcard";
 import type { Product } from "../../types/types";
 
 interface ProductGridProps {

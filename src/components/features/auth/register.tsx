@@ -49,7 +49,7 @@ export default function Register() {
   return (
     <div className="auth-shell">
       <div className="auth-card">
-        <section className="auth-form">
+        <form className="auth-form" onSubmit={handleRegister}>
           <div>
             <h2>Register</h2>
             <p>Fill the form to create a new account.</p>
@@ -84,8 +84,8 @@ export default function Register() {
           </div>
 
           <button
+          type="submit"
             className="button-primary"
-            onClick={handleRegister}
             disabled={isSubmitting}
           >
             {isSubmitting ? "Creating account..." : "Register"}
@@ -93,9 +93,9 @@ export default function Register() {
 
           <p className="auth-switch">
             Already registered?{" "}
-            <button onClick={() => navigate("/")}>Back to login</button>
+            <button type="button" onClick={() => navigate("/")}>Back to login</button>
           </p>
-        </section>
+        </form>
       </div>
     </div>
   );
